@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5113456017894450084}
   - component: {fileID: 5113456017894450085}
   - component: {fileID: 2036934579709412689}
+  - component: {fileID: 105243920574399362}
   m_Layer: 0
   m_Name: ColorChanger
   m_TagString: ColorChanger
@@ -101,3 +102,16 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.39499998
+--- !u!114 &105243920574399362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5113456017894450086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57beb1e88dde797428c8cee195652164, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 125

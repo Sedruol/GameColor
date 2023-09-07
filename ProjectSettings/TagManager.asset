@@ -10,6 +10,7 @@ TagManager:
   - Pink
   - ColorChanger
   - FinishLine
+  - Star
   layers:
   - Default
   - TransparentFX
