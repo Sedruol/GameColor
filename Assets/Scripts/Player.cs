@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject changeColor;
     [SerializeField] private GameObject finishLine;
     [SerializeField] private GameObject star;
+    [SerializeField] private Animator transitionAnimator;
     private string[] tags = new string[4];
     private int activeSceneIndex;
     private string currentColor;
@@ -27,6 +29,13 @@ public class Player : MonoBehaviour
         activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
         for (int i = 0; i < tags.Length; i++)
             tags[i] = circle.GetChild(i).tag;
+    }
+    public IEnumerator SceneLoad(int add)
+    {
+        yield return new WaitForSeconds(restartTime / 2);
+        transitionAnimator.SetTrigger("StartTransition");
+        yield return new WaitForSeconds(restartTime);
+        SceneManager.LoadScene(activeSceneIndex + add);
     }
     private void ChangeColor()
     {
@@ -64,11 +73,25 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+#if UNITY_STANDALONE
         if (Input.GetMouseButtonDown(0))
         {
             rbPlayer.velocity = Vector2.zero;
             rbPlayer.AddForce(new Vector2(0, forceVelocity));
         }
+#endif
+
+#if UNITY_ANDROID
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Began)
+            {
+                rbPlayer.velocity = Vector2.zero;
+                rbPlayer.AddForce(new Vector2(0, forceVelocity));
+            }
+        }
+#endif
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -80,15 +103,18 @@ public class Player : MonoBehaviour
         }
         if (collision.gameObject.CompareTag(finishLine.tag))
         {
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
+            DisablePlayer();
             Instantiate(particles, transform.position, Quaternion.identity);
             if (PlayerPrefs.GetInt("level", 1) <= 9)
             {
                 PlayerPrefs.SetInt("level", PlayerPrefs.GetInt("level", 1) + 1);
-                Invoke("RestartScene", restartTime);
+                SaveManager.SaveLevelData(PlayerPrefs.GetInt("level", 1));
+                StartCoroutine(SceneLoad(0));
+                //Invoke("RestartScene", restartTime);
             }
-            else
-                Invoke("LoadNextScene", restartTime);
+            else StartCoroutine(SceneLoad(1));
+            //Invoke("LoadNextScene", restartTime);
             return;
         }
         if (collision.gameObject.CompareTag(star.tag))
@@ -99,12 +125,18 @@ public class Player : MonoBehaviour
         }
         if (!collision.gameObject.CompareTag(currentColor))
         {
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
+            DisablePlayer();
             Instantiate(particles, transform.position, Quaternion.identity);
-            Invoke("RestartScene", restartTime);
+            StartCoroutine(SceneLoad(0));
+            //Invoke("RestartScene", restartTime);
         }
     }
-
+    private  void DisablePlayer()
+    {
+        gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        gameObject.GetComponent<CircleCollider2D>().enabled = false;
+    }
     private void LoadNextScene()
     {
         SceneManager.LoadScene(activeSceneIndex + 1);
