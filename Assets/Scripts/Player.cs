@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     private string currentColor;
     private int lastNumberColor = -1;
     private SpriteRenderer srPlayer;
+    private bool disabled = false;
 
     private void InitialConfiguration()
     {
@@ -69,9 +70,16 @@ public class Player : MonoBehaviour
         InitialConfiguration();
         ChangeColor();
     }
-
+    public void Move()
+    {
+        if (!disabled)
+        {
+            rbPlayer.velocity = Vector2.zero;
+            rbPlayer.AddForce(new Vector2(0, forceVelocity));
+        }
+    }
     // Update is called once per frame
-    void Update()
+    /*void Update()
     {
 #if UNITY_STANDALONE
         if (Input.GetMouseButtonDown(0))
@@ -92,7 +100,7 @@ public class Player : MonoBehaviour
             }
         }
 #endif
-    }
+    }*/
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag(changeColor.tag))
@@ -134,6 +142,7 @@ public class Player : MonoBehaviour
     }
     private  void DisablePlayer()
     {
+        disabled = true;
         gameObject.GetComponent<SpriteRenderer>().enabled = false;
         gameObject.GetComponent<CircleCollider2D>().enabled = false;
     }

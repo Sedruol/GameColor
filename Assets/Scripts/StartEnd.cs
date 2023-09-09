@@ -24,6 +24,7 @@ public class StartEnd : MonoBehaviour
     {
         //SaveManager.SaveLevelData(1);
         //PlayerPrefs.SetInt(PlayerPrefUnlocked, 1);
+        //PlayerPrefs.SetInt("level", 1);
         if (start)
         {
             for (int x = 1; x < lvlsButtonsParent.childCount; x++)
