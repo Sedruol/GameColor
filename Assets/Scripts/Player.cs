@@ -78,29 +78,6 @@ public class Player : MonoBehaviour
             rbPlayer.AddForce(new Vector2(0, forceVelocity));
         }
     }
-    // Update is called once per frame
-    /*void Update()
-    {
-#if UNITY_STANDALONE
-        if (Input.GetMouseButtonDown(0))
-        {
-            rbPlayer.velocity = Vector2.zero;
-            rbPlayer.AddForce(new Vector2(0, forceVelocity));
-        }
-#endif
-
-#if UNITY_ANDROID
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-            if (touch.phase == TouchPhase.Began)
-            {
-                rbPlayer.velocity = Vector2.zero;
-                rbPlayer.AddForce(new Vector2(0, forceVelocity));
-            }
-        }
-#endif
-    }*/
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag(changeColor.tag))
@@ -111,7 +88,6 @@ public class Player : MonoBehaviour
         }
         if (collision.gameObject.CompareTag(finishLine.tag))
         {
-            //gameObject.SetActive(false);
             DisablePlayer();
             Instantiate(particles, transform.position, Quaternion.identity);
             if (PlayerPrefs.GetInt("level", 1) <= 9)
@@ -119,10 +95,8 @@ public class Player : MonoBehaviour
                 PlayerPrefs.SetInt("level", PlayerPrefs.GetInt("level", 1) + 1);
                 SaveManager.SaveLevelData(PlayerPrefs.GetInt("level", 1));
                 StartCoroutine(SceneLoad(0));
-                //Invoke("RestartScene", restartTime);
             }
             else StartCoroutine(SceneLoad(1));
-            //Invoke("LoadNextScene", restartTime);
             return;
         }
         if (collision.gameObject.CompareTag(star.tag))
@@ -133,11 +107,9 @@ public class Player : MonoBehaviour
         }
         if (!collision.gameObject.CompareTag(currentColor))
         {
-            //gameObject.SetActive(false);
             DisablePlayer();
             Instantiate(particles, transform.position, Quaternion.identity);
             StartCoroutine(SceneLoad(0));
-            //Invoke("RestartScene", restartTime);
         }
     }
     private  void DisablePlayer()
@@ -145,14 +117,5 @@ public class Player : MonoBehaviour
         disabled = true;
         gameObject.GetComponent<SpriteRenderer>().enabled = false;
         gameObject.GetComponent<CircleCollider2D>().enabled = false;
-    }
-    private void LoadNextScene()
-    {
-        SceneManager.LoadScene(activeSceneIndex + 1);
-    }
-
-    private void RestartScene()
-    {
-        SceneManager.LoadScene(activeSceneIndex);
     }
 }

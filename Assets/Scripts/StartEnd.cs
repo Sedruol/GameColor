@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
@@ -21,7 +20,7 @@ public class StartEnd : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
     private void Start()
-    {
+    {//estas 3 lineas son para reiniciar los valores del nivel
         //SaveManager.SaveLevelData(1);
         //PlayerPrefs.SetInt(PlayerPrefUnlocked, 1);
         //PlayerPrefs.SetInt("level", 1);
